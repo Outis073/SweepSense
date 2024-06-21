@@ -1,0 +1,6 @@
+@SweepSenseApi_HostAddress = http://localhost:5276
+
+GET {{SweepSenseApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
