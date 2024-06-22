@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SweepSenseApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,61 +13,14 @@ namespace SweepSenseApp.Services
 {
     public class ApiService
     {
-        private readonly HttpClient _httpClient;
+        private readonly ApiConfigService _apiConfigService;
 
-        public ApiService()
+        public ApiService(ApiConfigService apiConfigService)
         {
-            _httpClient = new HttpClient();
+            _apiConfigService = apiConfigService;
         }
 
-        public async Task<string> LoginAsync(string username, string password)
-        {
-            try
-            {
-                var loginModel = new
-                {
-                    Username = username,
-                    Password = password
-                };
-
-                var json = JsonSerializer.Serialize(loginModel);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-
-                // emulator of local
-                var apiUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5276/api/Auth/login" : "https://localhost:7210/api/Auth/login";
-
-
-                if (string.IsNullOrEmpty(apiUrl))
-                {
-                    return null;
-                }
-
-                var response = await _httpClient.PostAsync(apiUrl, content);
-
-                if (response != null && response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-
-                    var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent);
-                    await SecureStorage.SetAsync("auth_token", tokenResponse.Token);
-                    return tokenResponse.Token;
-                }
-                else if (response != null)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-
-                }
-
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-        public async Task<HttpResponseMessage> GetSecureDataAsync()
+        private async Task AddAuthorizationHeaderAsync()
         {
             var token = await SecureStorage.GetAsync("auth_token");
 
@@ -75,17 +29,21 @@ namespace SweepSenseApp.Services
                 throw new InvalidOperationException("No token found");
             }
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var apiUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5276/api/SecureEndpoint" : "https://localhost:7210/api/SecureEndpoint";
-
-            return await _httpClient.GetAsync(apiUrl);
+            _apiConfigService.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-    }
 
-    public class TokenResponse
-    {
-        [JsonPropertyName("token")]
-        public string Token { get; set; }
+        public async Task<HttpResponseMessage> GetAsync(string endpoint)
+        {
+            await AddAuthorizationHeaderAsync();
+            var apiUrl = $"{_apiConfigService.BaseUrl}/{endpoint}";
+            return await _apiConfigService.HttpClient.GetAsync(apiUrl);
+        }
+
+        public async Task<HttpResponseMessage> PostAsync(string endpoint, HttpContent content)
+        {
+            await AddAuthorizationHeaderAsync();
+            var apiUrl = $"{_apiConfigService.BaseUrl}/{endpoint}";
+            return await _apiConfigService.HttpClient.PostAsync(apiUrl, content);
+        }
     }
 }

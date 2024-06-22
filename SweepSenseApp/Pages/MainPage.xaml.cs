@@ -1,4 +1,6 @@
-﻿namespace SweepSenseApp.Pages
+﻿using SweepSenseApp.Services;
+
+namespace SweepSenseApp.Pages
 {
     public partial class MainPage : ContentPage
     {

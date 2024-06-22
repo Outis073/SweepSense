@@ -3,12 +3,13 @@ namespace SweepSenseApp.Pages;
 
 public partial class LoginPage : ContentPage
 {
-    private readonly ApiService _apiService;
+    private readonly LoginService _loginService;
 
     public LoginPage()
     {
         InitializeComponent();
-        _apiService = new ApiService();
+        var apiConfigService = new ApiConfigService(); 
+        _loginService = new LoginService(apiConfigService); 
     }
 
     private async void OnLoginButtonClicked(object sender, EventArgs e)
@@ -16,17 +17,16 @@ public partial class LoginPage : ContentPage
         var username = UsernameEntry.Text;
         var password = PasswordEntry.Text;
 
-        var token = await _apiService.LoginAsync(username, password);
+        var token = await _loginService.LoginAsync(username, password);
 
         if (token != null)
         {
             MessageLabel.Text = "Login successful!";
-            // Navigate to main page or other secure page
-           await Navigation.PushAsync(new MainPage());
+            await Navigation.PushAsync(new MainPage());
         }
         else
         {
-            MessageLabel.Text = "Login failed. Please check your credentials.";
+            MessageLabel.Text = "Login failed!";
         }
     }
 }

@@ -16,6 +16,7 @@ namespace SweepSenseApp
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddHttpClient<ApiService>();
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

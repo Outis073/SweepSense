@@ -6,15 +6,6 @@ using SweepSenseApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(5276); // HTTP
-    options.ListenAnyIP(7210, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    });
-});
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -25,18 +16,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-//CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAllOrigins",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
 
 // All Services
 builder.Services.AddScoped<IRoleService, RoleService>();
@@ -81,8 +60,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 
