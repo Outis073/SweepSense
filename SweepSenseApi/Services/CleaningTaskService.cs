@@ -12,17 +12,19 @@ namespace SweepSenseApi.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<CleaningTask>> GetTasksForUserAsync(int userId)
+        public async Task<IEnumerable<CleaningTask>> GetTasksAsync()
         {
-            return await _context.CleaningTasks
-                .Where(t => t.UserId == userId)
-                .Include(t => t.Location)
-                .ToListAsync();
+            return await _context.CleaningTasks.Include(t => t.Location).Include(t => t.User).ToListAsync();
+        }
+
+        public async Task<CleaningTask> GetTaskByIdAsync(int id)
+        {
+            return await _context.CleaningTasks.Include(t => t.Location).Include(t => t.User).FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task AddTaskAsync(CleaningTask task)
         {
-            await _context.CleaningTasks.AddAsync(task);
+            _context.CleaningTasks.Add(task);
             await _context.SaveChangesAsync();
         }
 

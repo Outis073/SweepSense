@@ -6,9 +6,12 @@ namespace SweepSenseApp
         public AppShell()
         {
             InitializeComponent();
+        }
 
-            Routing.RegisterRoute(nameof(MainPage), typeof(Pages.MainPage));
-            Routing.RegisterRoute(nameof(LoginPage), typeof(Pages.LoginPage));
+        protected override void OnNavigated(ShellNavigatedEventArgs args)
+        {
+            base.OnNavigated(args);
+           
         }
     }
 }

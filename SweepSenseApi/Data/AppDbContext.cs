@@ -16,15 +16,5 @@ namespace SweepSenseApi.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<CleaningTask> CleaningTasks { get; set; }
 
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Role)
-                .WithMany()
-                .HasForeignKey(u => u.RoleId);
-
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }

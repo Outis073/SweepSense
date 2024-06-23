@@ -4,15 +4,39 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SweepSenseApp.Pages"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
     Title="SweepSenseApp">
 
-    <ShellItem Route="LoginPage">
-        <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" Route="LoginPage" />
-    </ShellItem>
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="50,*" Padding="7" RowDefinitions="28">
+                <Label Text="{Binding Title}" FontFamily="OpenSans_SemiBold" FontSize="Medium" Grid.Column="1" VerticalOptions="Center"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
 
-    <ShellItem Route="MainPage">
-        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
-    </ShellItem>
+    <FlyoutItem Title="Home">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" Route="HomePage"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Rooster">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate local:SchedulesPage}" Route="SchedulesPage"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Meldingen">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate local:ReportsPage}" Route="ReportsPage"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Profiel">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}" Route="ProfilePage"/>
+        </Tab>
+    </FlyoutItem>
 
 </Shell>

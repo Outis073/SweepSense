@@ -1,32 +1,38 @@
 using SweepSenseApp.Services;
-namespace SweepSenseApp.Pages;
+using SweepSenseApp.ViewModels;
 
-public partial class LoginPage : ContentPage
+namespace SweepSenseApp.Pages
 {
-    private readonly LoginService _loginService;
-
-    public LoginPage()
+    public partial class LoginPage : ContentPage
     {
-        InitializeComponent();
-        var apiConfigService = new ApiConfigService(); 
-        _loginService = new LoginService(apiConfigService); 
-    }
+        private readonly LoginService _loginService;
+        private readonly UserService _userService;
 
-    private async void OnLoginButtonClicked(object sender, EventArgs e)
-    {
-        var username = UsernameEntry.Text;
-        var password = PasswordEntry.Text;
-
-        var token = await _loginService.LoginAsync(username, password);
-
-        if (token != null)
+        public LoginPage(LoginService loginService, UserService userService)
         {
-            MessageLabel.Text = "Login successful!";
-            await Navigation.PushAsync(new MainPage());
+            InitializeComponent();
+            _loginService = loginService;
+            _userService = userService;
         }
-        else
+
+        private async void OnLoginButtonClicked(object sender, EventArgs e)
         {
-            MessageLabel.Text = "Login failed!";
+            var username = UsernameEntry.Text;
+            var password = PasswordEntry.Text;
+
+            var userId = await _loginService.LoginAsync(username, password);
+
+            if (userId != null)
+            {
+                MessageLabel.Text = "Login successful!";
+                await _userService.LoadUserDataAsync(userId);
+                var homePageViewModel = new HomeViewModel(_userService);
+                await Navigation.PushAsync(new HomePage(homePageViewModel));
+            }
+            else
+            {
+                MessageLabel.Text = "Login failed!";
+            }
         }
     }
 }

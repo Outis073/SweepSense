@@ -9,5 +9,4 @@ namespace SweepSenseApp.Pages
             InitializeComponent();
         }
     }
-
 }

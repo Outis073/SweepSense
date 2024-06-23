@@ -1,4 +1,5 @@
-﻿namespace SweepSenseApp
+﻿using SweepSenseApp.Pages;
+namespace SweepSenseApp
 {
     public partial class App : Application
     {
@@ -6,7 +7,9 @@
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new NavigationPage(
+            ActivatorUtilities.CreateInstance<LoginPage>(
+            MauiProgram.CreateMauiApp().Services));
         }
     }
 }
