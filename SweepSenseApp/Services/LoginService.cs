@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace SweepSenseApp.Services
 {
@@ -39,6 +41,9 @@ namespace SweepSenseApp.Services
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent);
                     await SecureStorage.SetAsync("auth_token", tokenResponse.Token);
+
+                    var userId = ExtractUserIdFromToken(tokenResponse.Token);
+                    await SecureStorage.SetAsync("user_id", userId);
                     return tokenResponse.Token;
                 }
                 else if (response != null)
@@ -52,6 +57,13 @@ namespace SweepSenseApp.Services
             {
                 return null;
             }
+        }
+
+        private string ExtractUserIdFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            return jwtToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
         }
     }
 

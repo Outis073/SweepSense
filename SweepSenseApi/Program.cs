@@ -23,6 +23,7 @@ builder.Services.AddScoped<ICleaningTaskService, CleaningTaskService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 //JWT Token
 var key = System.Text.Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);

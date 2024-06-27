@@ -33,6 +33,13 @@ namespace SweepSenseApi.Controllers
             return Ok(task);
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<CleaningTask>>> GetTasksByUserId(int userId)
+        {
+            var tasks = await _taskService.GetTasksByUserIdAsync(userId);
+            return Ok(tasks);
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostTask(CleaningTask task)
         {

@@ -47,7 +47,8 @@ namespace SweepSenseApi.Controllers
         new Claim(JwtRegisteredClaimNames.Sub, user.Username),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Role, user.Role?.Name ?? "User")
+        new Claim(ClaimTypes.Role, user.Role?.Name ?? "User"),
+        new Claim("name", user.Name) // Toevoegen van de naam van de gebruiker als een extra claim
     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

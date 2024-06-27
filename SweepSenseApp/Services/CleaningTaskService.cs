@@ -1,7 +1,11 @@
-﻿using SweepSenseApi.Data;
-using SweepSenseApi.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SweepSenseApp.Models;
 
-namespace SweepSenseApi.Services
+namespace SweepSenseApp.Services
 {
     public class CleaningTaskService : ICleaningTaskService
     {
@@ -31,7 +35,7 @@ namespace SweepSenseApi.Services
             {
                 existingTask.Name = task.Name;
                 existingTask.Description = task.Description;
-               
+                // Update other properties as needed
             }
             await Task.CompletedTask;
         }
@@ -46,7 +50,7 @@ namespace SweepSenseApi.Services
             await Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<CleaningTask>> GetTasksByUserIdAsync(int userId) 
+        public async Task<IEnumerable<CleaningTask>> GetTasksByUserIdAsync(int userId) // Implementatie van nieuwe methode
         {
             var tasks = _tasks.Where(t => t.UserId == userId).ToList();
             return await Task.FromResult(tasks);

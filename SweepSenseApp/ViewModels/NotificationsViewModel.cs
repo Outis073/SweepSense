@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SweepSenseApp.ViewModels
 {
-    internal class NotificationsViewModel
+    internal class NotificationsViewModel : BaseViewModel
     {
     }
 }

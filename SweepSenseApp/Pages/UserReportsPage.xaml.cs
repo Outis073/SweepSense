@@ -1,17 +1,27 @@
+using SweepSenseApp.Models;
 using SweepSenseApp.ViewModels;
-using SweepSenseApp.Pages;
 
 namespace SweepSenseApp.Pages;
 
-public partial class HomePage : ContentPage
+public partial class UserReportsPage : ContentPage
 {
+    private readonly UserReportsViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
 
-    public HomePage(IServiceProvider serviceProvider)
+    public UserReportsPage(UserReportsViewModel viewModel, IServiceProvider serviceProvider)
     {
         InitializeComponent();
-        _serviceProvider = serviceProvider;
+        BindingContext = viewModel;
+        _viewModel = viewModel;
+        _serviceProvider = serviceProvider; 
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.LoadReportsAsync();
+    }
+
     private async void OnCreateReportClicked(object sender, EventArgs e)
     {
         var createReportViewModel = _serviceProvider.GetRequiredService<CreateReportViewModel>();

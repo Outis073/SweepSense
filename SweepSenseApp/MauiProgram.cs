@@ -22,7 +22,9 @@ namespace SweepSenseApp
             builder.Services.AddSingleton<ApiConfigService>();
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddSingleton<LoginService>();
-            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddTransient<UserService>();
+            builder.Services.AddSingleton<CleaningTaskService>();
+            builder.Services.AddSingleton<ReportService>();
 
             // ViewModels
             builder.Services.AddTransient<HomeViewModel>();
@@ -30,12 +32,14 @@ namespace SweepSenseApp
             builder.Services.AddTransient<ClientsViewModel>();
             builder.Services.AddTransient<LocationsViewModel>();
             builder.Services.AddTransient<NotificationsViewModel>();
-            builder.Services.AddTransient<ProfileViewModel>();
+            builder.Services.AddTransient<ProfilePageViewModel>();
             builder.Services.AddTransient<RegistrationViewModel>();
             builder.Services.AddTransient<ReportsViewModel>();
             builder.Services.AddTransient<SchedulesViewModel>();
             builder.Services.AddTransient<TaskDetailViewModel>();
             builder.Services.AddTransient<TaskViewModel>();
+            builder.Services.AddTransient<UserReportsViewModel>();
+            builder.Services.AddTransient<CreateReportViewModel>();
 
             // Pages
             builder.Services.AddTransient<BranchesPage>();
@@ -51,6 +55,8 @@ namespace SweepSenseApp
             builder.Services.AddTransient<SchedulesPage>();
             builder.Services.AddTransient<TaskDetailPage>();
             builder.Services.AddTransient<TaskPage>();
+            builder.Services.AddTransient<UserReportsPage>();
+            builder.Services.AddTransient<CreateReportPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

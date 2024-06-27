@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SweepSenseApp.ViewModels"
+             xmlns:model="clr-namespace:SweepSenseApp.Models"
+             x:DataType="vm:UserReportsViewModel"             
+             x:Class="SweepSenseApp.Pages.UserReportsPage"
+             Title="My Reports">
+
+    <VerticalStackLayout Padding="10">
+        <StackLayout>
+            <Label Text="Welcome, " />
+            <Label Text="{Binding Username}" FontSize="24" />
+        </StackLayout>
+        <Button Text="Nieuwe melding maken" Clicked="OnCreateReportClicked" />
+       
+        <CollectionView ItemsSource="{Binding Reports}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Report">
+                    <StackLayout Orientation="Vertical" Padding="5">
+                        <Label Text="{Binding Id}" />
+                        <Label Text="{Binding Description}" FontAttributes="Bold" />
+                        <Image Source="{Binding Image}" HeightRequest="200" />
+                        <Label Text="{Binding Date}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

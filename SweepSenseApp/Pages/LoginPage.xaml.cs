@@ -20,14 +20,12 @@ namespace SweepSenseApp.Pages
             var username = UsernameEntry.Text;
             var password = PasswordEntry.Text;
 
-            var userId = await _loginService.LoginAsync(username, password);
+            var token = await _loginService.LoginAsync(username, password);
 
-            if (userId != null)
+            if (token != null)
             {
                 MessageLabel.Text = "Login successful!";
-                await _userService.LoadUserDataAsync(userId);
-                var homePageViewModel = new HomeViewModel(_userService);
-                await Navigation.PushAsync(new HomePage(homePageViewModel));
+                Application.Current.MainPage = new AppShell();
             }
             else
             {
