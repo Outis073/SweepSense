@@ -1,8 +1,6 @@
 ﻿using SweepSenseApp.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -35,8 +33,22 @@ namespace SweepSenseApp.Services
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            System.Diagnostics.Debug.WriteLine($"Reports JSON: {json}");
             return JsonSerializer.Deserialize<IEnumerable<Report>>(json);
+        }
+
+        public async Task DeleteReportAsync(int reportId)
+        {
+            try
+            {
+                var apiUrl = $"{_apiConfigService.BaseUrl}/report/{reportId}";
+                var response = await _apiConfigService.HttpClient.DeleteAsync(apiUrl);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Request error: {ex.Message}");
+                throw;
+            }
         }
     }
 }

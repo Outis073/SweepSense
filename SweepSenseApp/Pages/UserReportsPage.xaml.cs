@@ -1,5 +1,6 @@
 using SweepSenseApp.Models;
 using SweepSenseApp.ViewModels;
+using Microsoft.Maui.Controls;
 
 namespace SweepSenseApp.Pages;
 
@@ -13,7 +14,7 @@ public partial class UserReportsPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
         _viewModel = viewModel;
-        _serviceProvider = serviceProvider; 
+        _serviceProvider = serviceProvider;
     }
 
     protected override async void OnAppearing()
@@ -24,8 +25,6 @@ public partial class UserReportsPage : ContentPage
 
     private async void OnCreateReportClicked(object sender, EventArgs e)
     {
-        var createReportViewModel = _serviceProvider.GetRequiredService<CreateReportViewModel>();
-        var createReportPage = new CreateReportPage(createReportViewModel);
-        await Navigation.PushAsync(createReportPage);
+        await Shell.Current.GoToAsync(nameof(CreateReportPage));
     }
 }

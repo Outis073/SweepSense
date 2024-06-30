@@ -3,28 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SweepSenseApp.ViewModels"
              xmlns:model="clr-namespace:SweepSenseApp.Models"
-             x:DataType="vm:UserReportsViewModel"             
+             x:DataType="vm:UserReportsViewModel"
              x:Class="SweepSenseApp.Pages.UserReportsPage"
              Title="My Reports">
 
-    <VerticalStackLayout Padding="10">
-        <StackLayout>
-            <Label Text="Welcome, " />
-            <Label Text="{Binding Username}" FontSize="24" />
-        </StackLayout>
-        <Button Text="Nieuwe melding maken" Clicked="OnCreateReportClicked" />
-       
-        <CollectionView ItemsSource="{Binding Reports}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:Report">
-                    <StackLayout Orientation="Vertical" Padding="5">
-                        <Label Text="{Binding Id}" />
-                        <Label Text="{Binding Description}" FontAttributes="Bold" />
-                        <Image Source="{Binding Image}" HeightRequest="200" />
-                        <Label Text="{Binding Date}" />
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <StackLayout>
+                <Label Text="Welcome, " />
+                <Label Text="{Binding Username}" FontSize="24" />
+            </StackLayout>
+            <Button Text="Nieuwe melding maken" Clicked="OnCreateReportClicked" />
+
+            <CollectionView ItemsSource="{Binding Reports}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Report">
+                        <Frame Margin="5" Padding="10" BackgroundColor="LightGray" CornerRadius="8">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Id}" />
+                                <Label Text="{Binding Description}" FontAttributes="Bold" />
+                                <Image Source="{Binding Image}" HeightRequest="200" />
+                                <Label Text="{Binding Date, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
+                                <Button Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UserReportsViewModel}}, Path=DeleteReportCommand}" CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SweepSenseApp.ViewModels"
              x:Class="SweepSenseApp.Pages.ProfilePage"
+             x:DataType="vm:ProfilePageViewModel"
              Title="ProfilePage">
     
     <VerticalStackLayout Padding="10">
         <Label Text="Username:" FontAttributes="Bold" />
-        <Label Text="{Binding User.Username}" />
+        <Label Text="{Binding User.Username, FallbackValue='No Username'}" />
 
         <Label Text="Name:" FontAttributes="Bold" />
         <Label Text="{Binding User.Name}" />

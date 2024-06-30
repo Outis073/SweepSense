@@ -2,8 +2,34 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SweepSenseApp.ViewModels"
+             xmlns:converters="clr-namespace:SweepSenseApp.Converters"
              x:Class="SweepSenseApp.Pages.CreateReportPage"
-             Title="CreateReportPage">
-    
+             x:DataType="vm:CreateReportViewModel"
+             Title="Create Report">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Padding="10">
+        <Label Text="Create a new report" FontSize="24" />
+
+        <Label Text="Room ID" />
+        <Entry Text="{Binding Report.RoomId}" Placeholder="Enter Room ID" />
+
+        <Label Text="Description" />
+        <Editor Text="{Binding Report.Description}" Placeholder="Enter Description" />
+
+        <Button Text="Select Image from Gallery" Command="{Binding SelectImageCommand}" />
+        <Button Text="Capture Image with Camera" Command="{Binding CaptureImageCommand}" />
+
+        <Image Source="{Binding PreviewImage}" HeightRequest="200" IsVisible="{Binding PreviewImage, Converter={StaticResource StringToBoolConverter}}" />
+
+        <Button Text="Submit" Command="{Binding SaveReportCommand}" />
+
+        <Label Text="{Binding SuccessMessage}" TextColor="Green" IsVisible="{Binding SuccessMessage, Converter={StaticResource StringToBoolConverter}}" />
+        <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}" />
+    </VerticalStackLayout>
 </ContentPage>

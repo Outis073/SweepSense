@@ -1,52 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SweepSenseApp.Models;
 using SweepSenseApp.Services;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.Media;
 
 namespace SweepSenseApp.ViewModels
 {
-    public class CreateReportViewModel : INotifyPropertyChanged
+    public partial class CreateReportViewModel : ObservableObject
     {
         private readonly ReportService _reportService;
         private readonly UserService _userService;
-        private Report _report;
-        private string _errorMessage;
+        private readonly ImageService _imageService;
 
-        public CreateReportViewModel(ReportService reportService, UserService userService)
+        public CreateReportViewModel(ReportService reportService, UserService userService, ImageService imageService)
         {
             _reportService = reportService;
             _userService = userService;
-            SaveReportCommand = new Command(async () => await SaveReportAsync());
+            _imageService = imageService;
+            SaveReportCommand = new AsyncRelayCommand(SaveReportAsync);
+            SelectImageCommand = new AsyncRelayCommand(SelectImageAsync);
+            CaptureImageCommand = new AsyncRelayCommand(CaptureImageAsync);
             Report = new Report();
         }
 
-        public Report Report
+        [ObservableProperty]
+        private Report report;
+
+        [ObservableProperty]
+        private string errorMessage;
+
+        [ObservableProperty]
+        private string successMessage;
+
+        [ObservableProperty]
+        private ImageSource previewImage;
+
+        public IAsyncRelayCommand SaveReportCommand { get; }
+        public IAsyncRelayCommand SelectImageCommand { get; }
+        public IAsyncRelayCommand CaptureImageCommand { get; }
+
+        private async Task SelectImageAsync()
         {
-            get => _report;
-            set
+            try
             {
-                _report = value;
-                OnPropertyChanged();
+                var result = await MediaPicker.PickPhotoAsync();
+                if (result != null)
+                {
+                    var stream = await result.OpenReadAsync();
+                    var filePath = await _imageService.SaveImageAsync(stream, result.FileName);
+                    Report.Image = filePath;
+                    PreviewImage = ImageSource.FromFile(filePath);
+                    Debug.WriteLine($"Image selected and saved: {filePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"An error occurred while selecting the image: {ex.Message}";
+                Debug.WriteLine(ErrorMessage);
             }
         }
 
-        public string ErrorMessage
+        private async Task CaptureImageAsync()
         {
-            get => _errorMessage;
-            set
+            try
             {
-                _errorMessage = value;
-                OnPropertyChanged();
+                var result = await MediaPicker.CapturePhotoAsync();
+                if (result != null)
+                {
+                    var stream = await result.OpenReadAsync();
+                    var filePath = await _imageService.SaveImageAsync(stream, result.FileName);
+                    Report.Image = filePath;
+                    PreviewImage = ImageSource.FromFile(filePath);
+                    Debug.WriteLine($"Image captured and saved: {filePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"An error occurred while capturing the image: {ex.Message}";
+                Debug.WriteLine(ErrorMessage);
             }
         }
-
-        public ICommand SaveReportCommand { get; }
 
         private async Task SaveReportAsync()
         {
@@ -54,21 +91,22 @@ namespace SweepSenseApp.ViewModels
             {
                 var user = await _userService.GetUserDetailsAsync();
                 Report.UserId = user.Id;
+                Report.Date = DateTime.Now;
                 await _reportService.CreateReportAsync(Report);
                 ErrorMessage = string.Empty;
-               
+                SuccessMessage = "Report successfully created!";
+                Debug.WriteLine(SuccessMessage);
+
+                // Reset the fields
+                Report = new Report();
+                PreviewImage = null;
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"An error occurred while saving the report: {ex.Message}";
+                SuccessMessage = string.Empty;
+                Debug.WriteLine(ErrorMessage);
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -28,5 +28,18 @@ namespace SweepSenseApi.Controllers
             var reports = await _reportService.GetReportsByUserAsync(userId);
             return Ok(reports);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteReport(int id)
+        {
+            var report = await _reportService.GetReportByIdAsync(id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            await _reportService.DeleteReportAsync(report);
+            return NoContent();
+        }
     }
 }

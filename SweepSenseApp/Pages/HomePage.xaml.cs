@@ -14,8 +14,6 @@ public partial class HomePage : ContentPage
     }
     private async void OnCreateReportClicked(object sender, EventArgs e)
     {
-        var createReportViewModel = _serviceProvider.GetRequiredService<CreateReportViewModel>();
-        var createReportPage = new CreateReportPage(createReportViewModel);
-        await Navigation.PushAsync(createReportPage);
+        await Shell.Current.GoToAsync(nameof(CreateReportPage));
     }
 }

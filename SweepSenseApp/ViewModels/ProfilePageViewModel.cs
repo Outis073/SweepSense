@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SweepSenseApp.ViewModels
 {
-    public class ProfilePageViewModel : INotifyPropertyChanged
+    public partial class ProfilePageViewModel : BaseViewModel
     {
         private readonly UserService _userService;
-        private User _user;
 
         public ProfilePageViewModel(UserService userService)
         {
@@ -21,21 +21,15 @@ namespace SweepSenseApp.ViewModels
             LoadUserDetails();
         }
 
-        public User User
-        {
-            get => _user;
-            set
-            {
-                _user = value;
-                OnPropertyChanged(nameof(User));
-            }
-        }
+        [ObservableProperty]
+        User user;
 
-        private async void LoadUserDetails()
+        public async void LoadUserDetails()
         {
             try
             {
                 User = await _userService.GetUserDetailsAsync();
+                Console.WriteLine($"User loaded: {User.Username}, {User.Name}, {User.Role}");
             }
             catch (Exception ex)
             {
