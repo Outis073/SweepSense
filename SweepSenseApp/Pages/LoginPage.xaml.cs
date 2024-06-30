@@ -1,5 +1,4 @@
 using SweepSenseApp.Services;
-using SweepSenseApp.ViewModels;
 
 namespace SweepSenseApp.Pages
 {
@@ -25,7 +24,7 @@ namespace SweepSenseApp.Pages
             if (token != null)
             {
                 MessageLabel.Text = "Login successful!";
-                Application.Current.MainPage = new AppShell();
+                Application.Current.MainPage = new AppShell(_userService);
             }
             else
             {

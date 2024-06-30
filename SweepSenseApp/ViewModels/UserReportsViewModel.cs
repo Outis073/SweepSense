@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SweepSenseApp.ViewModels
 {
-    public partial class UserReportsViewModel : ObservableObject
+    public partial class UserReportsViewModel : BaseViewModel
     {
         private readonly ReportService _reportService;
         private readonly UserService _userService;
@@ -45,16 +45,13 @@ namespace SweepSenseApp.ViewModels
                 {
                     await LoadUserDetailsAsync();
                 }
-                Debug.WriteLine($"Loading reports for user ID: {_userId}");
                 var reports = await _reportService.GetReportsByUserAsync(_userId.ToString());
                 Reports = new ObservableCollection<Report>(reports);
                 ErrorMessage = string.Empty;
-                Debug.WriteLine($"Reports loaded: {Reports.Count}");
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"An error occurred while loading reports: {ex.Message}";
-                Debug.WriteLine($"LoadReportsAsync Exception: {ex.Message}");
             }
         }
 
@@ -65,12 +62,10 @@ namespace SweepSenseApp.ViewModels
                 var user = await _userService.GetUserDetailsAsync();
                 _userId = user.Id;
                 Username = user.Username;
-                Debug.WriteLine($"User details loaded: {Username} (ID: {_userId})");
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"An error occurred while loading user details: {ex.Message}";
-                Debug.WriteLine($"LoadUserDetailsAsync Exception: {ex.Message}");
             }
         }
 
@@ -85,16 +80,13 @@ namespace SweepSenseApp.ViewModels
             {
                 if (report != null)
                 {
-                    Debug.WriteLine($"Attempting to delete report: {report.Id}");
                     await _reportService.DeleteReportAsync(report.Id);
                     Reports.Remove(report);
-                    Debug.WriteLine($"Report deleted: {report.Id}");
                 }
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"An error occurred while deleting the report: {ex.Message}";
-                Debug.WriteLine($"DeleteReportAsync Exception: {ex.Message}");
             }
         }
 

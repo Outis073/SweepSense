@@ -8,7 +8,7 @@
     
     <VerticalStackLayout Padding="10">
         <Label Text="Username:" FontAttributes="Bold" />
-        <Label Text="{Binding User.Username, FallbackValue='No Username'}" />
+        <Label Text="{Binding User.Username}" />
 
         <Label Text="Name:" FontAttributes="Bold" />
         <Label Text="{Binding User.Name}" />

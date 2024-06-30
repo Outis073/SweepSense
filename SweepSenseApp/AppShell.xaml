@@ -21,12 +21,6 @@
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem Title="Rooster">
-        <Tab>
-            <ShellContent ContentTemplate="{DataTemplate local:SchedulesPage}" Route="SchedulesPage"/>
-        </Tab>
-    </FlyoutItem>
-
     <FlyoutItem Title="Meldingen">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:ReportsPage}" Route="ReportsPage"/>

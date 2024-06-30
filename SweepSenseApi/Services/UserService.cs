@@ -24,7 +24,11 @@ namespace SweepSenseApi.Services
 
         public async Task<User> AddUserAsync(User user)
         {
-            // Hash het wachtwoord voordat je het opslaat
+            if (user.CleaningTasks == null)
+            {
+                user.CleaningTasks = new List<CleaningTask>();
+            }
+
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -61,7 +65,6 @@ namespace SweepSenseApi.Services
 
             Console.WriteLine("Gebruiker gevonden, wachtwoord controleren");
 
-            // Verifieer het gehashte wachtwoord
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 Console.WriteLine("Wachtwoord komt niet overeen");

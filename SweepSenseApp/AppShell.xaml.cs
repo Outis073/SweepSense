@@ -1,9 +1,11 @@
 ﻿using SweepSenseApp.Pages;
+using SweepSenseApp.Services;
 namespace SweepSenseApp
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        private readonly UserService _userService;
+        public AppShell(UserService userService)
         {
             InitializeComponent();
 
@@ -20,6 +22,30 @@ namespace SweepSenseApp
             Routing.RegisterRoute(nameof(TaskDetailPage), typeof(TaskDetailPage));
             Routing.RegisterRoute(nameof(TaskPage), typeof(TaskPage));
             Routing.RegisterRoute(nameof(UserReportsPage), typeof(UserReportsPage));
+
+            _userService = userService;
+            ManageShellItems();
+        }
+
+        private async void ManageShellItems()
+        {
+            var user = await _userService.GetUserDetailsAsync();
+            if (user.Role == "Cleaner")
+            {
+                var schedulesPage = new FlyoutItem
+                {
+                    Title = "Schoonmaakrooster",
+                    Items =
+                    {
+                        new ShellContent
+                        {
+                            ContentTemplate = new DataTemplate(typeof(SchedulesPage)),
+                            Route = "SchedulesPage"
+                        }
+                    }
+                };
+                Items.Add(schedulesPage);
+            }
         }
 
         protected override void OnNavigated(ShellNavigatedEventArgs args)
@@ -27,5 +53,6 @@ namespace SweepSenseApp
             base.OnNavigated(args);
            
         }
+
     }
 }

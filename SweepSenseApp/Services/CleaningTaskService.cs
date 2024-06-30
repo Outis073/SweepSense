@@ -50,7 +50,7 @@ namespace SweepSenseApp.Services
             await Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<CleaningTask>> GetTasksByUserIdAsync(int userId) // Implementatie van nieuwe methode
+        public async Task<IEnumerable<CleaningTask>> GetTasksByUserIdAsync(int userId) 
         {
             var tasks = _tasks.Where(t => t.UserId == userId).ToList();
             return await Task.FromResult(tasks);

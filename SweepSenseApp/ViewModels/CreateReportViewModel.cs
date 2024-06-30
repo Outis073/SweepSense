@@ -10,7 +10,7 @@ using Microsoft.Maui.Media;
 
 namespace SweepSenseApp.ViewModels
 {
-    public partial class CreateReportViewModel : ObservableObject
+    public partial class CreateReportViewModel : BaseViewModel
     {
         private readonly ReportService _reportService;
         private readonly UserService _userService;

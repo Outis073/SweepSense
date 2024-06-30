@@ -9,6 +9,6 @@ namespace SweepSenseApi.Models
         public string Password { get; set; }
         public string Name { get; set; }
         public Role Role { get; set; }
-        public ICollection<CleaningTask> CleaningTasks { get; set; }
+        public ICollection<CleaningTask> CleaningTasks { get; set; } = new List<CleaningTask>();
     }
 }
