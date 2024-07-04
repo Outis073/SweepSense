@@ -74,5 +74,13 @@ namespace SweepSenseApi.Services
             Console.WriteLine("Wachtwoord klopt");
             return user;
         }
+
+        public async Task<IEnumerable<User>> GetUsersByRoleAsync(string role)
+        {
+            return await _context.Users
+                .Include(u => u.Role) 
+                .Where(u => u.Role.Name == role) 
+                .ToListAsync();
+        }
     }
 }

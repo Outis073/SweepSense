@@ -45,8 +45,8 @@ namespace SweepSenseApp.Services
                     Id = userId,
                     Username = username,
                     Name = name,
-                    Role = role,
-                    CleaningTasks = await GetCleaningTasksByUserIdAsync(userId)
+                    Role = role
+                 
                 };
 
                 return user;

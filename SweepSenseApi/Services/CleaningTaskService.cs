@@ -1,55 +1,56 @@
 ﻿using SweepSenseApi.Data;
 using SweepSenseApi.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SweepSenseApi.Services
 {
     public class CleaningTaskService : ICleaningTaskService
     {
-        private readonly List<CleaningTask> _tasks = new List<CleaningTask>();
+        private readonly AppDbContext _context;
+
+        public CleaningTaskService(AppDbContext context)
+        {
+            _context = context;
+        }
 
         public async Task<IEnumerable<CleaningTask>> GetTasksAsync()
         {
-            return await Task.FromResult(_tasks);
+            return await _context.CleaningTasks.ToListAsync();
         }
 
         public async Task<CleaningTask> GetTaskByIdAsync(int id)
         {
-            var task = _tasks.FirstOrDefault(t => t.Id == id);
-            return await Task.FromResult(task);
+            return await _context.CleaningTasks.FirstOrDefaultAsync(ct => ct.Id == id);
         }
 
         public async Task AddTaskAsync(CleaningTask task)
         {
-            _tasks.Add(task);
-            await Task.CompletedTask;
+            _context.CleaningTasks.Add(task);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateTaskAsync(CleaningTask task)
         {
-            var existingTask = _tasks.FirstOrDefault(t => t.Id == task.Id);
-            if (existingTask != null)
-            {
-                existingTask.Name = task.Name;
-                existingTask.Description = task.Description;
-               
-            }
-            await Task.CompletedTask;
+            _context.CleaningTasks.Update(task);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteTaskAsync(int id)
         {
-            var task = _tasks.FirstOrDefault(t => t.Id == id);
+            var task = await _context.CleaningTasks.FindAsync(id);
             if (task != null)
             {
-                _tasks.Remove(task);
+                _context.CleaningTasks.Remove(task);
+                await _context.SaveChangesAsync();
             }
-            await Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<CleaningTask>> GetTasksByUserIdAsync(int userId) 
+        public async Task<IEnumerable<CleaningTask>> GetTasksByUserIdAsync(int userId)
         {
-            var tasks = _tasks.Where(t => t.UserId == userId).ToList();
-            return await Task.FromResult(tasks);
+            return await _context.CleaningTasks.Where(t => t.UserId == userId).ToListAsync();
         }
     }
 }

@@ -10,5 +10,6 @@ namespace SweepSenseApi.Services
         Task UpdateUserAsync(User user);
         Task DeleteUserAsync(int id);
         Task<User> AuthenticateAsync(string username, string password);
+        Task<IEnumerable<User>> GetUsersByRoleAsync(string role);
     }
 }

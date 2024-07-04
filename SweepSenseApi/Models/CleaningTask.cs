@@ -7,9 +7,9 @@
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime ScheduledDate { get; set; }
-        public int LocationId { get; set; }
-        public Location Location { get; set; }
+        public string RoomId { get; set; }
+        public string LocationName { get; set; } 
         public int UserId { get; set; }
-        public User User { get; set; }
+        public string UserName { get; set; }
     }
 }

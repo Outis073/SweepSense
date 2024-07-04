@@ -23,8 +23,8 @@ namespace SweepSenseApp
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddSingleton<LoginService>();
             builder.Services.AddTransient<UserService>();
-            builder.Services.AddSingleton<CleaningTaskService>();
-            builder.Services.AddSingleton<ReportService>();
+            builder.Services.AddSingleton<ICleaningTaskService, CleaningTaskService>();
+            builder.Services.AddTransient<ReportService>();
             builder.Services.AddSingleton<ImageService>();
 
             // ViewModels
