@@ -11,10 +11,16 @@ namespace SweepSenseApp.Services
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl;
 
+        public ApiConfigService(HttpClient httpClient, string baseUrl)
+        {
+            _httpClient = httpClient;
+            _baseUrl = baseUrl;
+        }
+
         public ApiConfigService()
         {
             _httpClient = new HttpClient();
-            _baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "https://j2f8hgwx-7210.euw.devtunnels.ms/api" : "https://localhost:7210/api";
+            _baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "https://4j4pl0ts-7210.euw.devtunnels.ms/api" : "https://localhost:7210/api";
         }
 
         public HttpClient HttpClient => _httpClient;

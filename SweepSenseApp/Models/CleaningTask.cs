@@ -23,13 +23,7 @@ namespace SweepSenseApp.Models
         [JsonPropertyName("roomId")]
         public string RoomId { get; set; }
 
-        [JsonPropertyName("locationName")]
-        public string LocationName { get; set; }
-
         [JsonPropertyName("userId")]
         public int UserId { get; set; }
-
-        [JsonPropertyName("userName")]
-        public string UserName { get; set; }
     }
 }

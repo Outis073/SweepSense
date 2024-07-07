@@ -11,24 +11,23 @@ namespace SweepSenseApp.Pages
         private readonly ApiService _apiService;
         public ObservableCollection<CleaningTask> Tasks { get; set; }
 
-        public TaskPage()
+        public TaskPage(ApiService apiService)
         {
             InitializeComponent();
-            var apiConfigService = new ApiConfigService();
-            _apiService = new ApiService(apiConfigService);
+            _apiService = apiService;
             Tasks = new ObservableCollection<CleaningTask>();
             TaskListView.ItemsSource = Tasks;
-
             LoadTasks();
         }
 
         private async void LoadTasks()
         {
             var response = await _apiService.GetAsync("CleaningTask");
+
             if (response.IsSuccessStatusCode)
             {
-                var tasksJson = await response.Content.ReadAsStringAsync();
-                var tasks = JsonSerializer.Deserialize<List<CleaningTask>>(tasksJson);
+                var json = await response.Content.ReadAsStringAsync();
+                var tasks = JsonSerializer.Deserialize<List<CleaningTask>>(json);
                 foreach (var task in tasks)
                 {
                     Tasks.Add(task);

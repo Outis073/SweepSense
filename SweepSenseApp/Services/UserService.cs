@@ -15,18 +15,19 @@ namespace SweepSenseApp.Services
     public class UserService
     {
         private readonly ApiConfigService _apiConfigService;
+        private readonly ISecureStorageService _secureStorageService;
 
-        public UserService(ApiConfigService apiConfigService)
+        public UserService(ApiConfigService apiConfigService, ISecureStorageService secureStorageService)
         {
-            _apiConfigService = apiConfigService ?? throw new ArgumentNullException(nameof(apiConfigService));
+            _apiConfigService = apiConfigService;
+            _secureStorageService = secureStorageService;
         }
 
         public async Task<User> GetUserDetailsAsync()
         {
             try
             {
-                var token = await SecureStorage.GetAsync("auth_token");
-                System.Diagnostics.Debug.WriteLine($"Token retrieved: {token}");
+                var token = await _secureStorageService.GetAsync("auth_token");
                 if (string.IsNullOrEmpty(token))
                 {
                     throw new InvalidOperationException("No token found");
@@ -46,24 +47,23 @@ namespace SweepSenseApp.Services
                     Username = username,
                     Name = name,
                     Role = role
-                 
                 };
 
                 return user;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while getting user details: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"An error occurred while getting user details: {ex.Message}");
                 throw;
             }
         }
 
-        private async Task<ICollection<CleaningTask>> GetCleaningTasksByUserIdAsync(int userId)
+        public async Task<ICollection<CleaningTask>> GetCleaningTasksByUserIdAsync(int userId)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{_apiConfigService.BaseUrl}/cleaningtask/user/{userId}");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await SecureStorage.GetAsync("auth_token"));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _secureStorageService.GetAsync("auth_token"));
 
                 var response = await _apiConfigService.HttpClient.SendAsync(request);
 
@@ -75,13 +75,13 @@ namespace SweepSenseApp.Services
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Failed to fetch cleaning tasks: {response.StatusCode}, {errorContent}");
+                    System.Diagnostics.Debug.WriteLine($"Failed to fetch cleaning tasks: {response.StatusCode}, {errorContent}");
                     throw new HttpRequestException($"Failed to fetch cleaning tasks: {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while fetching cleaning tasks: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"An error occurred while fetching cleaning tasks: {ex.Message}");
                 throw;
             }
         }

@@ -13,10 +13,12 @@ namespace SweepSenseApp.Services
     public class LoginService
     {
         private readonly ApiConfigService _apiConfigService;
+        private readonly ISecureStorageService _secureStorageService;
 
-        public LoginService(ApiConfigService apiConfigService)
+        public LoginService(ApiConfigService apiConfigService, ISecureStorageService secureStorageService)
         {
             _apiConfigService = apiConfigService;
+            _secureStorageService = secureStorageService;
         }
 
         public async Task<string> LoginAsync(string username, string password)
@@ -40,10 +42,10 @@ namespace SweepSenseApp.Services
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent);
-                    await SecureStorage.SetAsync("auth_token", tokenResponse.Token);
+                    await _secureStorageService.SetAsync("auth_token", tokenResponse.Token);
 
                     var userId = ExtractUserIdFromToken(tokenResponse.Token);
-                    await SecureStorage.SetAsync("user_id", userId);
+                    await _secureStorageService.SetAsync("user_id", userId);
                     return tokenResponse.Token;
                 }
                 else if (response != null)

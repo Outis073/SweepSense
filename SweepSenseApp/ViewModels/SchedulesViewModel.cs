@@ -59,6 +59,7 @@ namespace SweepSenseApp.ViewModels
                     System.Diagnostics.Debug.WriteLine($"Loaded task: {task.Name}, {task.Description}");
                     CleaningTasks.Add(task);
                 }
+                SortTasks();
                 System.Diagnostics.Debug.WriteLine($"Loaded {CleaningTasks.Count} cleaning tasks.");
             }
             catch (Exception ex)
@@ -67,6 +68,7 @@ namespace SweepSenseApp.ViewModels
                 System.Diagnostics.Debug.WriteLine($"LoadScheduleAsync Error: {ex.Message}");
             }
         }
+
 
         private ICommand _markTaskAsCompleteCommand;
         public ICommand MarkTaskAsCompleteCommand => _markTaskAsCompleteCommand ??= new Command<CleaningTask>(async (task) => await MarkTaskAsCompleteAsync(task));
@@ -90,5 +92,20 @@ namespace SweepSenseApp.ViewModels
         {
             await LoadUserDetailsAsync();
         }
+
+        public void SortTasks()
+        {
+            var sortedTasks = CleaningTasks.OrderBy(task => task.IsCompleted)
+                                           .ThenBy(task => task.ScheduledDate)
+                                           .ToList();
+
+            CleaningTasks.Clear();
+
+            foreach (var task in sortedTasks)
+            {
+                CleaningTasks.Add(task);
+            }
+        }
+
     }
 }

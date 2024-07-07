@@ -17,6 +17,7 @@ namespace SweepSenseApp.Pages
         {
             base.OnAppearing();
             await _viewModel.RefreshDataAsync();
+            _viewModel.SortTasks();
         }
     }
 }

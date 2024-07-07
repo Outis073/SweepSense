@@ -20,12 +20,12 @@
                     <DataTemplate x:DataType="model:CleaningTask">
                         <Frame Margin="5" Padding="10" BackgroundColor="LightGray" CornerRadius="8">
                             <VerticalStackLayout>
+                                <Label Text="Taak gereed!" IsVisible="{Binding IsCompleted}" TextColor="Green" />
                                 <Label Text="{Binding RoomId}" FontAttributes="Bold" />
                                 <Label Text="{Binding Name}" />
                                 <Label Text="{Binding Description}" />
                                 <Label Text="{Binding ScheduledDate, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
-                                <Label Text="{Binding LocationName}" />
-                                <Button Text="Taak uitgevoerd" Command="{Binding Path=BindingContext.MarkTaskAsCompleteCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding .}" />
+                                <Button Text="Taak gereed melden" Command="{Binding Path=BindingContext.MarkTaskAsCompleteCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding .}" />
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>

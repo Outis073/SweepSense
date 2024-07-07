@@ -14,15 +14,17 @@ namespace SweepSenseApp.Services
     public class ApiService
     {
         private readonly ApiConfigService _apiConfigService;
+        private readonly ISecureStorageService _secureStorageService;
 
-        public ApiService(ApiConfigService apiConfigService)
+        public ApiService(ApiConfigService apiConfigService, ISecureStorageService secureStorageService)
         {
             _apiConfigService = apiConfigService;
+            _secureStorageService = secureStorageService;
         }
 
         private async Task AddAuthorizationHeaderAsync()
         {
-            var token = await SecureStorage.GetAsync("auth_token");
+            var token = await _secureStorageService.GetAsync("auth_token");
 
             if (string.IsNullOrEmpty(token))
             {
@@ -46,4 +48,5 @@ namespace SweepSenseApp.Services
             return await _apiConfigService.HttpClient.PostAsync(apiUrl, content);
         }
     }
+
 }

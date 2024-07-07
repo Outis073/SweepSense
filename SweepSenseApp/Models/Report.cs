@@ -27,6 +27,5 @@ namespace SweepSenseApp.Models
         [JsonPropertyName("date")]
         public DateTime Date { get; set; }
 
-        public string FullImagePath => Path.Combine(FileSystem.AppDataDirectory, "Uploads", Image);
     }
 }
