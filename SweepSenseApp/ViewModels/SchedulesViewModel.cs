@@ -20,6 +20,7 @@ namespace SweepSenseApp.ViewModels
             _userService = userService;
             _cleaningTaskService = cleaningTaskService;
             LoadUserDetailsAsync();
+            RefreshCommand = new AsyncRelayCommand(RefreshDataAsync);
         }
 
         [ObservableProperty]
@@ -69,7 +70,6 @@ namespace SweepSenseApp.ViewModels
             }
         }
 
-
         private ICommand _markTaskAsCompleteCommand;
         public ICommand MarkTaskAsCompleteCommand => _markTaskAsCompleteCommand ??= new Command<CleaningTask>(async (task) => await MarkTaskAsCompleteAsync(task));
 
@@ -107,5 +107,6 @@ namespace SweepSenseApp.ViewModels
             }
         }
 
+        public IAsyncRelayCommand RefreshCommand { get; }
     }
 }

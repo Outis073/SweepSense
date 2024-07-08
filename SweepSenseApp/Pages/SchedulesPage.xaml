@@ -10,10 +10,11 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="10">
-            <StackLayout>
-                <Label Text="{Binding Username}" FontSize="24" />
-                <Label Text="Dit zijn je schoonmaaktaken " />
+            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                <Label Text="{Binding Username}" FontSize="24" HorizontalOptions="StartAndExpand" />
+                <Label Text="Dit zijn je schoonmaaktaken " HorizontalOptions="EndAndExpand" />
             </StackLayout>
+            <Button Text="Ververs pagina" Command="{Binding RefreshCommand}" HorizontalOptions="EndAndExpand" />
 
             <CollectionView ItemsSource="{Binding CleaningTasks}">
                 <CollectionView.ItemTemplate>
