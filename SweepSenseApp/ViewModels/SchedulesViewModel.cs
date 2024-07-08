@@ -38,13 +38,11 @@ namespace SweepSenseApp.ViewModels
                 var user = await _userService.GetUserDetailsAsync();
                 _userId = user.Id;
                 Username = user.Username;
-                System.Diagnostics.Debug.WriteLine($"User ID: {_userId}, Username: {Username}");
                 await LoadScheduleAsync();
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"Er is een fout opgetreden bij het laden van gebruikersdetails: {ex.Message}";
-                System.Diagnostics.Debug.WriteLine($"LoadUserDetailsAsync Error: {ex.Message}");
             }
         }
 
@@ -52,21 +50,17 @@ namespace SweepSenseApp.ViewModels
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"Loading schedule for user ID: {_userId}");
                 var tasks = await _cleaningTaskService.GetTasksByUserIdAsync(_userId);
                 CleaningTasks.Clear();
                 foreach (var task in tasks)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Loaded task: {task.Name}, {task.Description}");
                     CleaningTasks.Add(task);
                 }
                 SortTasks();
-                System.Diagnostics.Debug.WriteLine($"Loaded {CleaningTasks.Count} cleaning tasks.");
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"Er is een fout opgetreden bij het laden van de planning: {ex.Message}";
-                System.Diagnostics.Debug.WriteLine($"LoadScheduleAsync Error: {ex.Message}");
             }
         }
 
@@ -84,7 +78,6 @@ namespace SweepSenseApp.ViewModels
             catch (Exception ex)
             {
                 ErrorMessage = $"Er is een fout opgetreden bij het markeren van de taak als voltooid: {ex.Message}";
-                System.Diagnostics.Debug.WriteLine($"MarkTaskAsCompleteAsync Error: {ex.Message}");
             }
         }
 

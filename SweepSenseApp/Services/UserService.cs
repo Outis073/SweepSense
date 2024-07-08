@@ -53,7 +53,6 @@ namespace SweepSenseApp.Services
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"An error occurred while getting user details: {ex.Message}");
                 throw;
             }
         }
@@ -75,13 +74,11 @@ namespace SweepSenseApp.Services
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    System.Diagnostics.Debug.WriteLine($"Failed to fetch cleaning tasks: {response.StatusCode}, {errorContent}");
                     throw new HttpRequestException($"Failed to fetch cleaning tasks: {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"An error occurred while fetching cleaning tasks: {ex.Message}");
                 throw;
             }
         }

@@ -54,7 +54,6 @@ namespace SweepSenseApp.ViewModels
                     var filePath = await _imageService.SaveImageAsync(stream, result.FileName);
                     Report.Image = filePath;
                     PreviewImage = ImageSource.FromFile(filePath);
-                    Debug.WriteLine($"Image selected and saved: {filePath}");
                 }
             }
             catch (Exception ex)
@@ -75,7 +74,6 @@ namespace SweepSenseApp.ViewModels
                     var filePath = await _imageService.SaveImageAsync(stream, result.FileName);
                     Report.Image = filePath;
                     PreviewImage = ImageSource.FromFile(filePath);
-                    Debug.WriteLine($"Image captured and saved: {filePath}");
                 }
             }
             catch (Exception ex)
