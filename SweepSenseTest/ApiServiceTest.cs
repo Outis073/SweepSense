@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace SweepSenseTest
 {
-    public class ApiServiceTests
+    public class ApiServiceTest
     {
         private readonly ApiService _apiService;
         private readonly MockHttpMessageHandler _mockHttpMessageHandler;
         private readonly Mock<ISecureStorageService> _mockSecureStorageService;
         private readonly ApiConfigService _apiConfigService;
 
-        public ApiServiceTests()
+        public ApiServiceTest()
         {
             _mockHttpMessageHandler = new MockHttpMessageHandler();
             _mockSecureStorageService = new Mock<ISecureStorageService>();
